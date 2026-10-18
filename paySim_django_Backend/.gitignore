@@ -1,0 +1,18 @@
+# envs
+paySim.env
+
+# db
+db.sqlite3
+
+# ide and os files
+.vscode/
+.idea/
+.DS_Store
+
+#logs
+*.log
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
