@@ -5,6 +5,8 @@ from customer.models import Customer
 from merchant.models import Merchant
 from django.db import transaction
 from django.core.exceptions import ValidationError as DjangoValidationError
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .utils import get_account_type
 
 class RegistrationSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True)
@@ -77,3 +79,25 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'last_name': instance.last_name,
             'account_type': 'customer' if hasattr(instance, 'customer_profile') else 'merchant',
         }
+
+
+class LoginSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['account_type'] = get_account_type(user)
+        token['username'] = user.username
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        user = self.user
+        data['user'] = {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'name': user.name,
+            'account_type': get_account_type(user),}
+        return data
+    

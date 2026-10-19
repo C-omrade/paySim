@@ -11,7 +11,7 @@ class MerchantViewSet(viewsets.ModelViewSet):
     serializer_class = MerchantSerializer
     permission_classes = [AllowAny]
 
-    @action(detail=True, methods=['post'], permission_classes=[AllowAny])
+    @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
     def approve(self, request, pk=None):
         merchant = self.get_object()
         merchant.status = 'approved'
