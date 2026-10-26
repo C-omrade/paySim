@@ -19,3 +19,7 @@ htmlcov/
 
 # Postman
 *.postman*
+
+__pycache__/
+
+.paySim_fast_env
